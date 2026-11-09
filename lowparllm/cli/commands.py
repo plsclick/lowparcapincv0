@@ -1025,7 +1025,9 @@ class CommandHandler:
                 "project_opened",
                 {"previous": str(previous), "current": str(current)},
             )
-        if action in {"status", "analyze", "refresh"} and len(args) == 1:
+        if action in {"status", "analyze", "refresh"} and (
+            len(args) == 1 or (not args and action == "status")
+        ):
             info = await asyncio.to_thread(self.workspace.project_info)
             return CommandResult("project_info", info)
         if action == "structure" and len(args) == 1:

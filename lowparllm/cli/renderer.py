@@ -993,6 +993,7 @@ class Renderer:
             console=self.console,
             refresh_per_second=12,
             transient=True,
+            vertical_overflow="visible",
         )
         self._live_response.start()
 

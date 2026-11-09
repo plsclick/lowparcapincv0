@@ -458,6 +458,15 @@ class CommandTests(unittest.TestCase):
         self.assertIsNone(self.execute("  hello"))
         self.assertEqual(self.provider.call_count, 0)
 
+    def test_project_without_arguments_shows_project_status(self) -> None:
+        with patch.object(
+            self.handler.workspace,
+            "project_info",
+            return_value=Mock(root=Path("/tmp/project")),
+        ):
+            result = self.execute("/project")
+        self.assertEqual(result.action, "project_info")
+
     def test_invalid_commands_and_arguments_are_helpful(self) -> None:
         unknown = self.execute("/wat")
         self.assertEqual(unknown.action, "error")

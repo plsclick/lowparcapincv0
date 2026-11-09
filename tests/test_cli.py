@@ -499,6 +499,22 @@ class TerminalTests(unittest.TestCase):
         self.assertIn("2.00s generation", rendered)
         self.assertIn("4.00s total", rendered)
 
+    def test_live_stream_shows_long_responses_without_terminal_height_ellipsis(self) -> None:
+        renderer = Renderer()
+        with patch("lowparllm.cli.renderer.Live") as live:
+            renderer.begin_stream()
+            renderer.stream_token("A long response " * 200)
+
+        self.assertEqual(
+            live.call_args.kwargs["vertical_overflow"],
+            "visible",
+        )
+        live.return_value.update.assert_called_once()
+        self.assertEqual(
+            live.return_value.update.call_args.args[0].markup,
+            "A long response " * 200,
+        )
+
     def test_assistant_markdown_links_and_code_blocks_are_rendered_and_copyable(self):
         from rich.console import Console
 
